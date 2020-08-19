@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<title>动态码</title>
+	<script src="js/echarts.min.js"></script>
+	<script src="js/jquery-2.1.1.min.js"></script>
+</head>
+<style>
+	html,body{width: 100%; height: 100%;padding: 0; margin: 0; overflow: hidden;}
+	.warp{width: 100%; height: 100%; background-color: #f2f2f2;
+		padding-top: 100px;}
+	.main{width: 60%;height: 30%;  margin: 0 auto;}
+	.btn{text-align: center; margin-top: 30%;}
+	.btn span{color: #fff; margin: 0 auto; padding: 5px 20px; background-color: #3ba2ff;border-radius: 25px;font-size: 1rem;}
+</style>
+<body>
+	<div class="warp">
+		<div id = "main" class="main"></div>
+		<div class="btn" onclick="btn()">
+			<span>
+				重新获取
+			</span>
+		</div>
+	</div>
+</body>
+<script type = "text/javascript">
+	
+	function btn(){
+		demo(1,'456456');
+	}
+	demo(2,'123123');
+	function demo(v1,v2){
+		var formatterval=v2;
+		var myChart = echarts.init(document.getElementById("main"));
+		var option = {
+				tooltip: {},
+				series: [{
+					type: 'pie',
+					radius: ['90%', '80%'],
+					center: ['50%', '50%'],
+					label: {
+						normal: {
+							position: 'center',
+							color: '#3ba2ff',
+						}
+					},
+					itemStyle: {
+						normal: {
+							color: '#3ba2ff'
+						}
+					},
+					hoverAnimation: false,//注释 鼠标移动不可改变
+					data: [{
+						value: v1,
+						name: '',
+						label: {
+							normal: {
+								// formatter: formatterval,
+								// formatter: function () {
+								// 	return formatterval.split(4).join("\n"); 
+								// },
+								formatter:function(params) {//文字换行显示
+								    var newParamsName = "";
+								    var paramsNameNumber = formatterval.length;
+								    var provideNumber = 3;  //一行显示几个字
+								    var rowNumber = Math.ceil(paramsNameNumber / provideNumber);
+								    if (paramsNameNumber > provideNumber) {
+								        for (var p = 0; p < rowNumber; p++) {
+								            var tempStr = "";
+								            var start = p * provideNumber;
+								            var end = start + provideNumber;
+								            if (p == rowNumber - 1) {
+								                tempStr = formatterval.substring(start, paramsNameNumber);
+								            } else {
+								                tempStr = formatterval.substring(start, end) + "\n";
+								                '{title|' + tempStr + '} ';
+								            }
+								            newParamsName += tempStr;
+								        }
+								    } else {
+								        newParamsName = formatterval;
+								    }
+								    return newParamsName;
+								},
+								textStyle: {
+									fontSize: 25,
+									color:'#000',
+									lineHeight: 35,
+								}
+							}
+						},
+						tooltip: {
+							trigger: 'item',
+							formatter: "动态码 : {c}"
+						}
+					}, {
+						value:1,
+						label: {
+							normal: {
+								formatter: '',
+								textStyle: {
+									color: '#555',
+									fontSize: 13
+								}
+							}
+						},
+						tooltip: {
+							show: false
+						},
+						itemStyle: {
+							normal: {
+								color: '#fff'
+							},
+							emphasis: {
+								color: '#fff'
+							}
+						},
+					}]
+				}]
+			};
+		myChart.setOption(option)
+	}
+	
+	
+	</script>
+</html>
